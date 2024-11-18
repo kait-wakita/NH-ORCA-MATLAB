@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ORCA-MATLAB sample
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear all;
 
 pyrun("import pyrvo2")
 pyrun("import numpy as np")
@@ -9,12 +10,26 @@ pyrun("from pyrvo2 import *")
 
 radius_std = 2.0;
 
-agents(1).pos=[-200; 0];
-agents(1).goal=[200; 0];
-agents(1).radius = radius_std;
-agents(2).pos=[200; 0];
-agents(2).goal=[-200; 0];
-agents(2).radius = radius_std;
+n_grp_y = 3;
+n_grp_yh = (n_grp_y-1)/2;
+n_grp_x = 3;
+n_grp_xh = (n_grp_x-1)/2;
+dist_grp = 9;
+
+ia=1;
+for i = 1:n_grp_y
+    yg = (i-n_grp_yh) * dist_grp;
+    for j = 1:n_grp_x
+        xg_offset = (j-n_grp_xh) * dist_grp;
+        agents(ia).pos    = [-150-xg_offset; yg];
+        agents(ia+1).pos  = [ 150-xg_offset; yg];    
+        agents(ia).goal   = [ 150-xg_offset; yg];
+        agents(ia+1).goal = [-150-xg_offset; yg];
+        agents(ia).radius = radius_std;
+        agents(ia+1).radius = radius_std;
+        ia = ia + 2;
+    end
+end
 
 close all;
 figure('Position',[10 100 500 500]);
