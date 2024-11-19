@@ -10,9 +10,9 @@ pyrun("from pyrvo2 import *")
 
 radius_std = 2.0;
 
-n_grp_y = 3;
+n_grp_y = 5;
 n_grp_yh = (n_grp_y-1)/2;
-n_grp_x = 3;
+n_grp_x = 5;
 n_grp_xh = (n_grp_x-1)/2;
 dist_grp = 9;
 
@@ -35,6 +35,7 @@ close all;
 figure('Position',[10 100 500 500]);
 xlim([-250 250]);
 ylim([-250 250]);
+pause(0.0);
 
 tic
 m_sim = pyrun("sim=RVOSimulator()","sim");
@@ -82,9 +83,10 @@ end
 
 function agents_new = updateAgents(agents)
 agents_new = agents;
+xy = pyrun("result2 = [sim.getAgentPosition(i) for i in range(sim.getNumAgents())]","result2");
+cxy = cell(xy);
 for i = 1:length(agents)
-    xy = pyrun("xy=sim.getAgentPosition(ii)","xy",ii=int32(i-1));
-    agents_new(i).pos = double(xy)';
+    agents_new(i).pos = double(cxy{i})';
 end
 end
 
@@ -94,14 +96,20 @@ hold on;
 xlim([-250 250]);
 ylim([-250 250]);
 
-for i = 1:length(agents)
-    x = agents(i).pos(1);
-    y = agents(i).pos(2);
-    r = agents(i).radius;
-    rectangle('Position',[x-r,y-r,2*r,2*r],'Curvature',[1,1],'FaceColor','b')
-    %fprintf("%f %f   ",x, y);
-end
-%fprintf("\n");
-pause(0.0);
+% for i = 1:length(agents)
+%     x = agents(i).pos(1);
+%     y = agents(i).pos(2);
+%     r = agents(i).radius;
+%     rectangle('Position',[x-r,y-r,2*r,2*r],'Curvature',[1,1],'FaceColor','b')
+%     fprintf("%f %f   ",x, y);
+% end
+% fprintf("\n");
 
+% agents radius is not 
+for i = 1:length(agents)
+    xx(i) = agents(i).pos(1);
+    yy(i) = agents(i).pos(2);
+end
+plot(xx,yy,'o');
+pause(0.0);
 end
